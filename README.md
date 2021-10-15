@@ -1,46 +1,119 @@
-# Getting Started with Create React App
+## React × TypeScript × ESLint × Prettier　の環境構築
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+1. Create react app を利用して、React　×　TypeScript環境を準備
 
-## Available Scripts
+以下のコマンドを実施
+`npx create-react-app my-app --template typescript`
+  `or`
+`yarn create react-app my-app --template typescript`
 
-In the project directory, you can run:
+参照：
+https://create-react-app.dev/docs/adding-typescript/
 
-### `yarn start`
+2. PrettierとESLintの設定インストール
+`yarn add -D eslint prettier eslint-config-prettier`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- eslint-config-prettierのインストールを行う（これがないとcompile Errorが起きてしまうので注意）
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+`npm install --save-dev eslint-config-prettier`
 
-### `yarn test`
+参照：
+https://github.com/prettier/eslint-config-prettier
+https://stackoverflow.com/questions/61597932/eslint-couldnt-find-the-config-prettier-to-extend-from
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. TypeScriptの設定インストール
+`$ yarn add -D typescript @typescript-eslint/{parser,eslint-plugin}`
 
-### `yarn build`
+4. Reactの設定インストール
+`yarn add react react-dom`
+`yarn add -D @types/{react,react-dom}`
+`yarn add -D eslint-plugin-{react,react-hooks}`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5. tsconfig.jsonの設定例
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- create react-appでルートディレクトリに該当ファイルが作成されているはず。
+  なければルートディレクトリで`touch tsconfig.json`を実行してファイル作成
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "lib": ["DOM", "ES2020"],
+    "jsx": "react",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "target": "ES2015",
+      "module": "CommonJS"
+    }
+  }
+}
 
-### `yarn eject`
+6. .eslintrc.json
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- ルートディレクトリで`touch .eslintrc.json`を実行してファイル作成
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "commonjs": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": ["react-hooks", "react", "@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "react/prop-types": "off"
+  }
+}
+> extendsではprettierを配列の最後部に記述することが必要
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+7. .prettierrc.jsonの設定
+{
+  "singleQuote": true,
+  "jsxBracketSameLine": true
+}
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+8.VSCodeへの設定
 
-## Learn More
+- ESLintとPrettierの拡張をインストールする
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- .vscode/settings.jsonのファイルを開いて以下の設定を行う
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+{
+  "editor.formatOnSave": true,    // <-- prettierで整形
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true  // <-- eslintでリント
+  },
+  // デフォルトフォーマッタをprettierに
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
+
+設定手順の参照先
+https://zenn.dev/sprout2000/articles/9f20902d394aa2
