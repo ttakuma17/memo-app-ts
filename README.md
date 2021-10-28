@@ -60,6 +60,8 @@ npm i @types/react-beautiful-dnd --save-dev
 
 - [react-router](https://github.com/remix-run/react-router)
 
+#### done
+
 ```
 yarn add react-router
 yarn add @types/react-router --dev
@@ -69,6 +71,8 @@ npm i @types/react-router --save-dev
 ```
 
 - [react-router-dom](https://github.com/remix-run/react-router)
+
+#### done
 
 ```
 yarn add react-router-dom
