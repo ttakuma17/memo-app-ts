@@ -1,120 +1,72 @@
-## React × TypeScript × ESLint × Prettier 　の環境構築
+**# 何でもメモアプリの作成**
 
-1. Create react app を利用して、React 　 × 　 TypeScript 環境を準備
+**## 利用ライブラリとインストールコマンド**
 
-以下のコマンドを実施
-`npx create-react-app my-app --template typescript`
-`or`
-`yarn create react-app my-app --template typescript`
+- [ESLint](https://github.com/eslint/eslint)
+- [Prettier](https://github.com/prettier/prettier)
+- [ChakraUI 公式](https://chakra-ui.com/)
 
-参照：
-https://create-react-app.dev/docs/adding-typescript/
+[ChakraUI-Github]https://github.com/chakra-ui/chakra-ui/
 
-2. Prettier と ESLint の設定インストール
-   `yarn add -D eslint prettier eslint-config-prettier`
+```
+yarn add @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
+or
+npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
+```
 
-- eslint-config-prettier のインストールを行う（これがないと compile Error が起きてしまうので注意）
+- [React Icon 公式](https://react-icons.github.io/react-icons)
+- [React Icon-Github](https://github.com/react-icons/react-icons)
 
-`npm install --save-dev eslint-config-prettier`
+```
+yarn add react-icons
+or
+npm install react-icons --save
+```
 
-参照：
-https://github.com/prettier/eslint-config-prettier
-https://stackoverflow.com/questions/61597932/eslint-couldnt-find-the-config-prettier-to-extend-from
+- [recoil](https://github.com/facebookexperimental/Recoil)
 
-3. TypeScript の設定インストール
-   `$ yarn add -D typescript @typescript-eslint/{parser,eslint-plugin}`
+```
+yarn add recoil
+or
+npm install recoil
+```
 
-4. React の設定インストール
-   `yarn add react react-dom`
-   `yarn add -D @types/{react,react-dom}`
-   `yarn add -D eslint-plugin-{react,react-hooks}`
+- [axios](https://github.com/axios/axios)
 
-5. tsconfig.json の設定例
+```
+npm install axios
+or
+yarn add axios
+```
 
-- create react-app でルートディレクトリに該当ファイルが作成されているはず。
-  なければルートディレクトリで`touch tsconfig.json`を実行してファイル作成
+- [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
 
-{
-"compilerOptions": {
-"target": "ES2020",
-"module": "ES2020",
-"moduleResolution": "Node",
-"esModuleInterop": true,
-"lib": ["DOM", "ES2020"],
-"jsx": "react",
-"strict": true,
-"sourceMap": true,
-"resolveJsonModule": true,
-"forceConsistentCasingInFileNames": true
-},
-"ts-node": {
-"compilerOptions": {
-"target": "ES2015",
-"module": "CommonJS"
-}
-}
-}
+[install 手順](https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/about/installation.md)
 
-6. .eslintrc.json
+```
+yarn add react-beautiful-dnd
+yarn add @types/react-beautiful-dnd --dev
+or
+npm i react-beautiful-dnd
+npm i @types/react-beautiful-dnd --save-dev
+```
 
-- ルートディレクトリで`touch .eslintrc.json`を実行してファイル作成
+- [react-router](https://github.com/remix-run/react-router)
 
-{
-"env": {
-"es6": true,
-"node": true,
-"browser": true,
-"commonjs": true
-},
-"parser": "@typescript-eslint/parser",
-"parserOptions": {
-"ecmaVersion": 2018,
-"ecmaFeatures": {
-"jsx": true
-},
-"sourceType": "module"
-},
-"settings": {
-"react": {
-"version": "detect"
-}
-},
-"plugins": ["react-hooks", "react", "@typescript-eslint"],
-"extends": [
-"eslint:recommended",
-"plugin:@typescript-eslint/eslint-recommended",
-"plugin:@typescript-eslint/recommended",
-"plugin:react/recommended",
-"plugin:react-hooks/recommended",
-"prettier"
-],
-"rules": {
-"react/prop-types": "off"
-}
-}
+```
+yarn add react-router
+yarn add @types/react-router --dev
+or
+npm i react-router
+npm i @types/react-router --save-dev
+```
 
-> extends では prettier を配列の最後部に記述することが必要
+- [react-router-dom](https://github.com/remix-run/react-router)
 
-7. .prettierrc.json の設定
-   {
-   "singleQuote": true,
-   "jsxBracketSameLine": true
-   }
-
-8.VSCode への設定
-
-- ESLint と Prettier の拡張をインストールする
-
-- .vscode/settings.json のファイルを開いて以下の設定を行う
-
-{
-"editor.formatOnSave": true, // <-- prettier で整形
-"editor.codeActionsOnSave": {
-"source.fixAll.eslint": true // <-- eslint でリント
-},
-// デフォルトフォーマッタを prettier に
-"editor.defaultFormatter": "esbenp.prettier-vscode"
-}
-
-設定手順の参照先
-https://zenn.dev/sprout2000/articles/9f20902d394aa2
+```
+yarn add react-router-dom
+yarn add @types/react-router-dom --dev
+or
+npm i react-router-dom
+npm i @types/react-router-dom --save-dev
+```
