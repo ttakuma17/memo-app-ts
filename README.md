@@ -5,8 +5,9 @@
 - [ESLint](https://github.com/eslint/eslint)
 - [Prettier](https://github.com/prettier/prettier)
 - [ChakraUI 公式](https://chakra-ui.com/)
+  [ChakraUI-Github]https://github.com/chakra-ui/chakra-ui/
 
-[ChakraUI-Github]https://github.com/chakra-ui/chakra-ui/
+#### done
 
 ```
 yarn add @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
@@ -17,6 +18,8 @@ npm i @chakra-ui/react @emotion/react@^11 @emotion/styled@^11 framer-motion@^4
 - [React Icon 公式](https://react-icons.github.io/react-icons)
 - [React Icon-Github](https://github.com/react-icons/react-icons)
 
+#### done
+
 ```
 yarn add react-icons
 or
@@ -24,6 +27,8 @@ npm install react-icons --save
 ```
 
 - [recoil](https://github.com/facebookexperimental/Recoil)
+
+#### done
 
 ```
 yarn add recoil
@@ -33,10 +38,12 @@ npm install recoil
 
 - [axios](https://github.com/axios/axios)
 
+#### done
+
 ```
-npm install axios
-or
 yarn add axios
+or
+npm install axios
 ```
 
 - [react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd)
