@@ -1,13 +1,13 @@
 import React, { memo, VFC } from 'react';
 import { Header } from '../components/Header';
 
-export const Home: VFC = memo(() => {
+export const Help: VFC = memo(() => {
   return (
     <>
       <Header />
-      <p>Homeページです</p>
+      <p>Helpページ</p>
     </>
   );
 });
 
-Home.displayName = 'Home';
+Help.displayName = 'Help';
