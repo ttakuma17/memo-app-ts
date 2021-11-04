@@ -11,6 +11,7 @@ import { PrimaryButton } from './PrimaryButton';
 // 更新ボタン,削除ボタン,チェックボックス(グレーアウトするかしないか、disableにするかしないか)
 // 一覧画面のときはtextareaは編集ができないようにする
 // メモのアイテムのデザインを整えること → 一旦mainブランチでデフォルトCSSを設定してから開発する
+// メモのアイテムのデザインを整えること → 一旦mainブランチでデフォルトCSSを設定してから開発進める
 
 export const MemoItem = memo(() => {
   return (
