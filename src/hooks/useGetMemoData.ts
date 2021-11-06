@@ -8,6 +8,9 @@ export const useGetMemoData = () => {
     headers: { 'Content-Type': 'application/json' },
   });
 
+  // 固定値で意図したリクエストとレスポンスを得られるように実装する
+  // 制御ができるようになったらコンポーネント側の入力値を利用してリクエストするよう変更
+
   // トークンを発行する関数を定義 /login に対するAPIリクエスト[POST]
   const getToken = () => {
     axiosInstance
@@ -33,13 +36,12 @@ export const useGetMemoData = () => {
         // 情報が一致しない場合にcatchへ処理が遷移していることを確認
         console.log(error);
         // 実装が必要な処理「取得したトークン情報をローカルストレージへ保存する」
-
-        // ログインページへ再ルーティングを行う
+        // ログインページへルーティング
         // わかりやすいエラーメッセージを表示させる(toast系の処理の作成後実装)
       });
   };
   // メモの一覧を取得する関数を定義
-  const getAllMemo = () => {
+  const getAllMemos = () => {
     // ローカルストレージからトークン情報を取得、トークンを何らかの変数へ格納する
     // Bearer認証に利用するとしてリクエスト情報に含める → axiosでBearer認証をするときの方法を調査すること
     // レスポンスデータの取り扱いは呼び出し側で制御させるので、レスポンスデータを利用可能な状態にしておけば良い
@@ -48,7 +50,6 @@ export const useGetMemoData = () => {
     // 2.取得したトークン情報をBearer認証に利用可能なように記述
     // 3.GETリクエストを送信
     // 4. レスポンスとして、メモのデータを取得できていればOK
-    //
     const tokenInLocalStorage: any = localStorage.getItem('token');
     // 型推論 string | null
     console.log(tokenInLocalStorage); // 実行された
@@ -60,7 +61,8 @@ export const useGetMemoData = () => {
     // const bearerAuth = JSON.parse(authkey);
     console.log(typeof token.access_token);
     // JSON化までは完了しているので、リクエストの方法に問題がありそう
-    // トークンの文字列のみ送るよう指定してもだめだった→リクエスト先のURL自体を間違えていたmemosと指定スべきところがmemoでsが抜けていたことが要因
+    // トークンの文字列のみ送るよう指定してもだめだった→リクエスト先のURL自体を間違えていた
+    // memosと指定すべきところがmemoでsが抜けていたことが要因だったがデータ取得は完了
     axiosInstance
       .get('/memos', {
         headers: {
@@ -76,45 +78,49 @@ export const useGetMemoData = () => {
         console.log(error);
       });
   };
-  // 次のリクエスト→新規登録から作成、メモ一覧の取得に近いので
-  return { getToken, getAllMemo };
+  // メモの新規登録 POST
+  const createNewMemo = () => {
+    const tokenInLocalStorage: any = localStorage.getItem('token');
+    const token: any = JSON.parse(tokenInLocalStorage);
+    console.log(token.access_token);
+    // 401エラー unauth → ローカルストレージのトークンが一致していなかった
+    // トークン情報を一致させるもおなじく401 unauthorizedエラー
+    // リクエスト先URLは一致していることを確認
+    // トークン情報も発行されたものと一致
+    // メモ一覧を取得する関数は同じトークンを使用したところリクエストに成功した
+    // トークンは間違いないようだが、401エラーである理由がわからない
+    axiosInstance
+      .post('/memo', {
+        headers: {
+          Authorization: `Bearer ${token.access_token}`,
+        },
+        body: {
+          title: '今日の講義について',
+          category: '授業メモ',
+          description: '第９回の授業メモです\\nこんなことしました。',
+          date: '2021/08/01',
+          mark_div: 1,
+        },
+      })
+      .then((response) => {
+        // レスポンスとして期待するデータ
+        console.log(response);
+      })
+      .catch((error) => {
+        // エラー時のロジックはほぼ共通化できるため、後ほど実装
+        console.log(error);
+      });
+  };
+  return { getToken, getAllMemos, createNewMemo };
 };
-// ２．ロジックの作成 → カスタムフックを定義して必要なリクエストをコンポーネント側で呼び出す方針とする hooksのuseGetMemoDataへ作業ログを移行
-// inputに入力されたテキストをバックエンドに送信する
-// レスポンスとして受け取ったトークン情報をローカルストレージに保存する
-// リクエストの送信時
 
-// axios インスタンスの作成 ( https://raisetech-memo-api.herokuapp.com/api)
-
-// リクエストの指定方法の調査
-// Bearer認証のリクエスト例
-// https://qiita.com/hirohero/items/8199cda2fada7432887e
-// https://github.com/axios/axios#request-config
-
-// リクエストのエイリアス
-// axios.post(url[, data[, config]])
-// 1
-// トークンの発行
-// リクエスト：Headers Content-Type: application/json
-// 必須情報 email / password
-// レスポンス
-// 200 "access_token": "{token}"
-//  → 認証の成功としてHomeページへルーティング + ローカルストレージにtokenを保存 + 認証に成功しましたのメッセージ
-// 401 "message": "unauthorized"
-//  → 認証の失敗としてLoginページへ再ルーティングして、email passwordのinputを初期化 + 認証に失敗しましたのメッセージ
-// 2
+// 残
 // メモの新規登録
 // Headers Content-Type: application/json ・ Authorization: Bearer {token}
 
-// axios.get(url[, config])
-// 3
-// メモ一覧の取得
-
-// axios.put(url[, data[, config]])
-// URI Parameterの指定が必要なため、少し時間がかかりそう
-// 4
+// 以下は、URI Parameterの指定が必要なため、少し時間がかかりそう
 // メモの更新
+// axios.put(url[, data[, config]])
 
-// axios.delete(url[, config])
-// 5
 // メモの削除
+// axios.delete(url[, config])

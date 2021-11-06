@@ -7,7 +7,8 @@ import { useGetMemoData } from '../hooks/useGetMemoData';
 
 export const Home: VFC = memo(() => {
   // const { getToken } = useGetMemoData();
-  const { getAllMemo } = useGetMemoData();
+  const { getAllMemos } = useGetMemoData();
+  const { createNewMemo } = useGetMemoData();
   return (
     <>
       <Header />
@@ -23,7 +24,8 @@ export const Home: VFC = memo(() => {
         </WrapItem>
       </Wrap>
       {/* {getToken()} */}
-      {getAllMemo()}
+      {getAllMemos()}
+      {createNewMemo()}
     </>
   );
 });
