@@ -65,7 +65,6 @@ export const useGetMemoData = () => {
     // console.log(
     //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjIwODIyMSwiZXhwIjoxNjM2Mjk0NjIxfQ.ufZci0UO4Onm0qHTV1IVmvpreqrM4nfG9TUNpl21ANA'
     // );
-
     // JSON化までは完了しているので、リクエストの方法に問題がありそう
     // トークンの文字列のみ送るよう指定してもだめだった→リクエスト先のURL自体を間違えていた
     // memosと指定すべきところがmemoでsが抜けていたことが要因だったがデータ取得は完了
