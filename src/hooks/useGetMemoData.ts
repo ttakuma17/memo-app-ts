@@ -72,9 +72,9 @@ export const useGetMemoData = () => {
     axiosInstance
       .get('/memos', {
         headers: {
-          // Authorization: `Bearer ${token.access_token}`,
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjIwODIyMSwiZXhwIjoxNjM2Mjk0NjIxfQ.ufZci0UO4Onm0qHTV1IVmvpreqrM4nfG9TUNpl21ANA',
+          Authorization: `Bearer ${token.access_token}`,
+          // Authorization:
+          //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjM3NDI4NSwiZXhwIjoxNjM2NDYwNjg1fQ.Z2iDaN32CuycQabWM5PmaZh45GN0vPISHzw30Zdu7ok',
           // 直入れでメモを取得できることを確認
         },
       })
@@ -106,21 +106,23 @@ export const useGetMemoData = () => {
     // メモ一覧を取得する関数は同じトークンを使用したところリクエストに成功した
     // トークンは間違いないようだが、401エラーである理由がわからない
     axiosInstance
-      .post('/memo', {
-        headers: {
-          // Authorization: `Bearer ${token.access_token}`,
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjIwODIyMSwiZXhwIjoxNjM2Mjk0NjIxfQ.ufZci0UO4Onm0qHTV1IVmvpreqrM4nfG9TUNpl21ANA',
-          // 直入れでも401エラーが発生する
-        },
-        body: {
+      .post(
+        '/memo',
+        {
           title: '今日の講義について',
           category: '授業メモ',
           description: '第９回の授業メモです\\nこんなことしました。',
           date: '2021/08/01',
           mark_div: 1,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token.access_token}`,
+            // Authorization:
+            //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjM3NDI4NSwiZXhwIjoxNjM2NDYwNjg1fQ.Z2iDaN32CuycQabWM5PmaZh45GN0vPISHzw30Zdu7ok',
+          },
+        }
+      )
       .then((response) => {
         // レスポンスとして期待するデータ
         console.log(response);
