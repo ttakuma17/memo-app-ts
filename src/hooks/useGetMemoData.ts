@@ -23,14 +23,9 @@ export const useGetMemoData = () => {
       .then((response) => {
         console.log(response);
         // 実装が必要な処理「取得したトークン情報をローカルストレージへ保存する」
-        // console.log(response.data);
-        // トークンを取り出せるように処理を記載する(data > access_tokenの中身)
-        // 結果：{access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsI…TIwfQ.qMI2z-zfvhvxc2FriCsYtQYDVhFLA3bOkxZyvGVPfuA'}
         // 取得した情報をJSON形式へ変換し、変数へ格納する
-        // そのまま格納できそう→ オブジェクトで返ってきているので一旦文字列に変換する
         const token = JSON.stringify(response.data);
         localStorage.setItem('token', token);
-        // 変数をlocalstorage.setItemを利用して保存する: 完了
         // 保存が終わったらhomeページへルーティングする(後ほど実装とする)
       })
       .catch((error) => {
@@ -42,39 +37,14 @@ export const useGetMemoData = () => {
       });
   }, []);
 
-  // メモの一覧を取得する関数を定義
+  // メモの一覧を取得 GET
   const getAllMemos = useCallback(() => {
-    // ローカルストレージからトークン情報を取得、トークンを何らかの変数へ格納する
-    // Bearer認証に利用するとしてリクエスト情報に含める → axiosでBearer認証をするときの方法を調査すること
-    // レスポンスデータの取り扱いは呼び出し側で制御させるので、レスポンスデータを利用可能な状態にしておけば良い
-    // よって実装ステップとしては以下
-    // 1.ローカルストレージのトークン情報を取得
-    // 2.取得したトークン情報をBearer認証に利用可能なように記述
-    // 3.GETリクエストを送信
-    // 4. レスポンスとして、メモのデータを取得できていればOK
     const tokenInLocalStorage: any = localStorage.getItem('token');
-    // 型推論 string | null
-    // console.log(tokenInLocalStorage); // 実行された
-    // console.log(typeof tokenInLocalStorage); // string型なのでJSONオブジェクトへ変換が必要
     const token: any = JSON.parse(tokenInLocalStorage);
-    // 追加：nullの可能性がある変数をString型が必要な引数に割り当てることはできないというエラー
-    // console.log(token.access_token);
-    // console.log(typeof token);
-    // console.log(typeof token.access_token);
-    // console.log(`Bearer ${token.access_token}`);
-    // console.log(
-    //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjIwODIyMSwiZXhwIjoxNjM2Mjk0NjIxfQ.ufZci0UO4Onm0qHTV1IVmvpreqrM4nfG9TUNpl21ANA'
-    // );
-    // JSON化までは完了しているので、リクエストの方法に問題がありそう
-    // トークンの文字列のみ送るよう指定してもだめだった→リクエスト先のURL自体を間違えていた
-    // memosと指定すべきところがmemoでsが抜けていたことが要因だったがデータ取得は完了
     axiosInstance
       .get('/memos', {
         headers: {
           Authorization: `Bearer ${token.access_token}`,
-          // Authorization:
-          //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjM3NDI4NSwiZXhwIjoxNjM2NDYwNjg1fQ.Z2iDaN32CuycQabWM5PmaZh45GN0vPISHzw30Zdu7ok',
-          // 直入れでメモを取得できることを確認
         },
       })
       .then((response) => {
@@ -89,21 +59,8 @@ export const useGetMemoData = () => {
 
   // メモの新規登録 POST
   const createNewMemo = useCallback(() => {
-    // ローカルストレージのトークンを取得
     const tokenInLocalStorage: any = localStorage.getItem('token');
-    // console.log(tokenInLocalStorage);
-    // トークンをJSONへ変換
     const token: any = JSON.parse(tokenInLocalStorage);
-    // JSON.parseの確認
-    // console.log('parseできた' + `${token.access_token}`);
-    // parseもできているような感じ
-    // console.log(token.access_token);
-    // 401エラー unauth → ローカルストレージのトークンが一致していなかった
-    // トークン情報を一致させるもおなじく401 unauthorizedエラー
-    // リクエスト先URLは一致していることを確認
-    // トークン情報も発行されたものと一致
-    // メモ一覧を取得する関数は同じトークンを使用したところリクエストに成功した
-    // トークンは間違いないようだが、401エラーである理由がわからない
     axiosInstance
       .post(
         '/memo',
@@ -117,8 +74,6 @@ export const useGetMemoData = () => {
         {
           headers: {
             Authorization: `Bearer ${token.access_token}`,
-            // Authorization:
-            //   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTIsImlhdCI6MTYzNjM3NDI4NSwiZXhwIjoxNjM2NDYwNjg1fQ.Z2iDaN32CuycQabWM5PmaZh45GN0vPISHzw30Zdu7ok',
           },
         }
       )
@@ -132,16 +87,52 @@ export const useGetMemoData = () => {
       });
   }, []);
 
-  return { getToken, getAllMemos, createNewMemo };
+  // ここまではOK
+
+  // メモの更新 PUT
+  // axios.put(url[, data[, config]])
+  const updateMemo = useCallback(() => {
+    const tokenInLocalStorage: any = localStorage.getItem('token');
+    const token: any = JSON.parse(tokenInLocalStorage);
+    const id = '310';
+    axiosInstance
+      .put(
+        // 400 bad request
+        `/memo/${id}`,
+        {
+          title: '更新今日の講義について',
+          category: '更新授業メモ',
+          description: '更新第９回の授業メモです\\nこんなことしました。',
+          date: '更新2021/08/01',
+          mark_div: 0,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token.access_token}`,
+          },
+        }
+      )
+      .then((response) => {
+        // レスポンスとして期待するデータ
+        console.log(response);
+      })
+      .catch((error) => {
+        // エラー時のロジックはほぼ共通化できるため、後ほど実装
+        console.log(error);
+      });
+  }, []);
+
+  // メモの削除 DELETE 問題箇所がidの指定と共通しているので一旦保留 同様のBadRequestが発生
+  // const deleteMemo = useCallback(() => {
+  //   const tokenInLocalStorage: any = localStorage.getItem('token');
+  //   const token: any = JSON.parse(tokenInLocalStorage);
+  //   const id = '328';
+  //   axios.delete(`/memo/${id}`, {
+  //     headers: {
+  //       Authorization: `Bearer ${token.access_token}`,
+  //     },
+  //   });
+  // }, []);
+
+  return { getToken, getAllMemos, createNewMemo, updateMemo };
 };
-
-// 残
-// メモの新規登録
-// Headers Content-Type: application/json ・ Authorization: Bearer {token}
-
-// 以下は、URI Parameterの指定が必要なため、少し時間がかかりそう
-// メモの更新
-// axios.put(url[, data[, config]])
-
-// メモの削除
-// axios.delete(url[, config])
