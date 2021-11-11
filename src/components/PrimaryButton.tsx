@@ -3,7 +3,7 @@ import React, { memo, ReactNode, VFC } from 'react';
 
 type Props = {
   children: ReactNode;
-  // onClick: () => void;
+  onClick: () => void;
 };
 
 // ボタンに実装する処理
@@ -13,9 +13,14 @@ type Props = {
 //  Buttonに指定した、onClick={onClick} を一時的に削除
 
 export const PrimaryButton: VFC<Props> = memo((props) => {
-  const { children } = props;
+  const { children, onClick } = props;
   return (
-    <Button m={2} _hover={{ opacity: 0.8 }}>
+    <Button
+      m={2}
+      bg="cyan.500"
+      color="white"
+      _hover={{ opacity: 0.8 }}
+      onClick={onClick}>
       {children}
     </Button>
   );

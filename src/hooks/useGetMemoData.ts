@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
-import axios from 'axios';
+import { useHistory } from 'react-router';
+import axios, { AxiosInstance } from 'axios';
 
 export const useGetMemoData = () => {
+  const history = useHistory();
+
   // ベースのリクエスト時にURLは多用するため、インスタンスとして定義
-  const axiosInstance = axios.create({
+  const axiosInstance: AxiosInstance = axios.create({
     baseURL: 'https://raisetech-memo-api.herokuapp.com/api',
     timeout: 3000,
     headers: { 'Content-Type': 'application/json' },
@@ -13,12 +16,14 @@ export const useGetMemoData = () => {
   // 制御ができるようになったらコンポーネント側の入力値を利用してリクエストするよう変更
 
   // トークンを発行する関数を定義 /login に対するAPIリクエスト[POST]
-  const getToken = useCallback(() => {
+  const getToken = useCallback((email, password): void => {
     axiosInstance
       .post('/login', {
         // inputボックスに入れた値を代入できるようにする必要がある
-        email: 'ttakuma@example.com',
-        password: '12345678',
+        // email: 'ttakuma@example.com',
+        // password: '12345678',
+        email: email,
+        password: password,
       })
       .then((response) => {
         console.log(response);
@@ -27,6 +32,7 @@ export const useGetMemoData = () => {
         const token = JSON.stringify(response.data);
         localStorage.setItem('token', token);
         // 保存が終わったらhomeページへルーティングする(後ほど実装とする)
+        history.push('/home');
       })
       .catch((error) => {
         // 情報が一致しない場合にcatchへ処理が遷移していることを確認
@@ -38,9 +44,19 @@ export const useGetMemoData = () => {
   }, []);
 
   // メモの一覧を取得 GET
-  const getAllMemos = useCallback(() => {
+  const getAllMemos = useCallback((): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
+
+    // nullだった場合の処理とストレージの値を取得できた場合の処理を切り分けて記載すること
+    // const token = (tokenInLocalStorage: string | null) => {
+    //   if (!tokenInLocalStorage) {
+    //     console.error('トークンを取得してください');
+    //     return;
+    //   }
+    //   return JSON.parse(tokenInLocalStorage);
+    // }
+
     axiosInstance
       .get('/memos', {
         headers: {
@@ -58,7 +74,7 @@ export const useGetMemoData = () => {
   }, []);
 
   // メモの新規登録 POST
-  const createNewMemo = useCallback(() => {
+  const createNewMemo = useCallback((): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
     axiosInstance
@@ -91,7 +107,7 @@ export const useGetMemoData = () => {
 
   // メモの更新 PUT
   // axios.put(url[, data[, config]])
-  const updateMemo = useCallback(() => {
+  const updateMemo = useCallback((): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
     const id = '310';
@@ -103,7 +119,7 @@ export const useGetMemoData = () => {
           title: '更新今日の講義について',
           category: '更新授業メモ',
           description: '更新第９回の授業メモです\\nこんなことしました。',
-          date: '更新2021/08/01',
+          date: '2021/08/01',
           mark_div: 0,
         },
         {
@@ -122,17 +138,17 @@ export const useGetMemoData = () => {
       });
   }, []);
 
-  // メモの削除 DELETE 問題箇所がidの指定と共通しているので一旦保留 同様のBadRequestが発生
-  // const deleteMemo = useCallback(() => {
-  //   const tokenInLocalStorage: any = localStorage.getItem('token');
-  //   const token: any = JSON.parse(tokenInLocalStorage);
-  //   const id = '328';
-  //   axios.delete(`/memo/${id}`, {
-  //     headers: {
-  //       Authorization: `Bearer ${token.access_token}`,
-  //     },
-  //   });
-  // }, []);
+  // メモの削除 DELETE 問題箇所がidの指定と共通しているので一旦保留 同様のBadRequestが発生 → 日付の指定がおかしいだけだった
+  const deleteMemo = useCallback((): void => {
+    const tokenInLocalStorage: any = localStorage.getItem('token');
+    const token: any = JSON.parse(tokenInLocalStorage);
+    const id = '328';
+    axiosInstance.delete(`/memo/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    });
+  }, []);
 
-  return { getToken, getAllMemos, createNewMemo, updateMemo };
+  return { getToken, getAllMemos, createNewMemo, updateMemo, deleteMemo };
 };

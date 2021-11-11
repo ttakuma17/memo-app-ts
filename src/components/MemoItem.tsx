@@ -15,6 +15,9 @@ import { PrimaryButton } from './PrimaryButton';
 
 // checkboxは現状チェックにtrueを入れている → mark_divが1ならchecked 0ならuncheckedに
 
+// <PrimaryButton>編集ボタン</PrimaryButton>
+// <PrimaryButton>削除ボタン</PrimaryButton>
+
 export const MemoItem = memo(() => {
   return (
     <Box
@@ -36,8 +39,8 @@ export const MemoItem = memo(() => {
         メモの説明(description)
       </Textarea>
       <Flex pt={2} alignItems="center">
-        <PrimaryButton>編集ボタン</PrimaryButton>
-        <PrimaryButton>削除ボタン</PrimaryButton>
+        {/* 後ほどボタンを追加 */}
+
         <Checkbox isChecked={true}>表示</Checkbox>
       </Flex>
     </Box>

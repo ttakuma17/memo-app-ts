@@ -9,8 +9,8 @@ export const Home: VFC = memo(() => {
   // const { getToken } = useGetMemoData();
   const { getAllMemos } = useGetMemoData();
   // const { createNewMemo } = useGetMemoData();
-  // const { updateMemo } = useGetMemoData();
-  // const { deleteMemo } = useGetMemoData();
+  const { updateMemo } = useGetMemoData();
+  const { deleteMemo } = useGetMemoData();
   return (
     <>
       <Header />
@@ -28,8 +28,8 @@ export const Home: VFC = memo(() => {
       {/* {getToken()} */}
       {getAllMemos()}
       {/* {createNewMemo()} */}
-      {/* {updateMemo()} */}
-      {/* {deleteMemo()} */}
+      {updateMemo()}
+      {deleteMemo()}
     </>
   );
 });
