@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, VFC } from 'react';
 
 import { Checkbox } from '@chakra-ui/checkbox';
 import { Flex, Heading } from '@chakra-ui/layout';
@@ -7,20 +7,27 @@ import { Textarea } from '@chakra-ui/textarea';
 import { RiGhost2Line } from 'react-icons/ri';
 
 import { PrimaryButton } from './PrimaryButton';
-import { useGetMemoData } from '../hooks/useGetMemoData';
 
 // メモのアイテムの要素
-// 更新ボタン,削除ボタン,チェックボックス(グレーアウトするかしないか、disableにするかしないか)
-// 一覧画面のときはtextareaは編集ができないようにする
-// メモのアイテムのデザインを整えること → 一旦mainブランチでデフォルトCSSを設定してから開発する
+// 一覧画面のときはtextareaは編集ができないようにする : done
+// メモのアイテムのデザインを整えること → 一旦mainブランチでデフォルトCSSを設定してから開発する:done
+// checkboxは現状チェックにtrueを入れている → mark_divが1ならchecked 0ならuncheckedに: done
+// MemoItemにAPIのデータを格納できるようにする:done
 
-// checkboxは現状チェックにtrueを入れている → mark_divが1ならchecked 0ならuncheckedに
-// MemoItemにAPIのデータを格納できるようにする
+// 更新ボタン,削除ボタン,チェックボックス(グレーアウトするかしないか、disableにするかしないか):todo
+// checkboxをクリックで制御可能に: todo
 
-export const MemoItem = memo(() => {
-  const { getAllMemos } = useGetMemoData();
-  console.log('データの取り出し方と型定義を検討');
-  console.log(getAllMemos());
+type Props = {
+  // id: string;
+  title: string;
+  description: string;
+  mark_div: number;
+  // onClick: () => void;
+};
+
+export const MemoItem: VFC<Props> = memo((props) => {
+  const { title, description, mark_div } = props;
+  const checkedFlag = mark_div == 1 ? true : false;
 
   return (
     <Box
@@ -35,16 +42,16 @@ export const MemoItem = memo(() => {
       <Flex>
         <RiGhost2Line />
         <Heading size="md" pl={1} pb={4}>
-          メモのタイトル(title)
+          {title}
         </Heading>
       </Flex>
       <Textarea size="sm" resize="none" h="180px" isReadOnly={true}>
-        メモの説明(description)
+        {description}
       </Textarea>
       <Flex pt={2} alignItems="center">
-        {/* 後ほどボタンを追加 */}
-
-        <Checkbox isChecked={true}>表示</Checkbox>
+        <PrimaryButton onClick={() => alert('更新ボタン')}>更新</PrimaryButton>
+        <PrimaryButton onClick={() => alert('削除ボタン')}>削除</PrimaryButton>
+        <Checkbox isChecked={checkedFlag}>表示</Checkbox>
       </Flex>
     </Box>
   );

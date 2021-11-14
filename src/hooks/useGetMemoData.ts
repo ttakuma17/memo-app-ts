@@ -1,8 +1,18 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
 import axios, { AxiosInstance } from 'axios';
 
+type Memo = {
+  id: string;
+  title: string;
+  category?: string;
+  description: string;
+  date?: string;
+  mark_div: number;
+};
+
 export const useGetMemoData = () => {
+  const [memos, setMemos] = useState<Array<Memo>>([]);
   const history = useHistory();
 
   // ベースのリクエスト時にURLは多用するため、インスタンスとして定義
@@ -11,15 +21,6 @@ export const useGetMemoData = () => {
     timeout: 3000,
     headers: { 'Content-Type': 'application/json' },
   });
-
-  type Memo = {
-    id: string;
-    title: string;
-    category?: string;
-    description?: string;
-    date?: string;
-    mark_div: number;
-  };
 
   // 固定値で意図したリクエストとレスポンスを得られるように実装する
   // 制御ができるようになったらコンポーネント側の入力値を利用してリクエストするよう変更
@@ -67,7 +68,7 @@ export const useGetMemoData = () => {
     // }
 
     axiosInstance
-      .get<Array<Memo[]>>('/memos', {
+      .get<Array<Memo>>('/memos', {
         headers: {
           Authorization: `Bearer ${token.access_token}`,
         },
@@ -75,6 +76,7 @@ export const useGetMemoData = () => {
       .then((response) => {
         // レスポンスとして期待するデータ
         console.log(response);
+        setMemos(response.data);
       })
       .catch((error) => {
         // エラー時のロジックはほぼ共通化できるため、後ほど実装
@@ -159,5 +161,12 @@ export const useGetMemoData = () => {
     });
   }, []);
 
-  return { getToken, getAllMemos, createNewMemo, updateMemo, deleteMemo };
+  return {
+    getToken,
+    getAllMemos,
+    memos,
+    createNewMemo,
+    updateMemo,
+    deleteMemo,
+  };
 };
