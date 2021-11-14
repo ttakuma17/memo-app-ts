@@ -12,6 +12,15 @@ export const useGetMemoData = () => {
     headers: { 'Content-Type': 'application/json' },
   });
 
+  type Memo = {
+    id: string;
+    title: string;
+    category?: string;
+    description?: string;
+    date?: string;
+    mark_div: number;
+  };
+
   // 固定値で意図したリクエストとレスポンスを得られるように実装する
   // 制御ができるようになったらコンポーネント側の入力値を利用してリクエストするよう変更
 
@@ -58,7 +67,7 @@ export const useGetMemoData = () => {
     // }
 
     axiosInstance
-      .get('/memos', {
+      .get<Array<Memo[]>>('/memos', {
         headers: {
           Authorization: `Bearer ${token.access_token}`,
         },
