@@ -3,14 +3,14 @@ import { Wrap, WrapItem } from '@chakra-ui/react';
 
 import { Header } from '../components/Header';
 import { MemoItem } from '../components/MemoItem';
-import { useGetMemoData } from '../hooks/useGetMemoData';
+// import { useGetMemoData } from '../hooks/useGetMemoData';
 
 export const Home: VFC = memo(() => {
   // const { getToken } = useGetMemoData();
-  const { getAllMemos } = useGetMemoData();
+  // const { getAllMemos } = useGetMemoData();
   // const { createNewMemo } = useGetMemoData();
-  const { updateMemo } = useGetMemoData();
-  const { deleteMemo } = useGetMemoData();
+  // const { updateMemo } = useGetMemoData();
+  // const { deleteMemo } = useGetMemoData();
   return (
     <>
       <Header />
@@ -26,10 +26,10 @@ export const Home: VFC = memo(() => {
         </WrapItem>
       </Wrap>
       {/* {getToken()} */}
-      {getAllMemos()}
+      {/* {getAllMemos()} */}
       {/* {createNewMemo()} */}
-      {updateMemo()}
-      {deleteMemo()}
+      {/* {updateMemo()} */}
+      {/* {deleteMemo()} */}
     </>
   );
 });

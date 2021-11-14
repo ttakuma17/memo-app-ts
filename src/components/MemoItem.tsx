@@ -30,8 +30,8 @@ export const MemoItem = memo(() => {
       shadow="md"
       borderRadius="md">
       <Flex>
-        <RiGhost2Line />
         <Heading size="md" pl={1} pb={4}>
+          <RiGhost2Line />
           メモのタイトル(title)
         </Heading>
       </Flex>
