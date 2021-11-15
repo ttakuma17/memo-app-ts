@@ -150,10 +150,19 @@ export const useGetMemoData = () => {
   }, []);
 
   // メモの削除 DELETE 問題箇所がidの指定と共通しているので一旦保留 同様のBadRequestが発生 → 日付の指定がおかしいだけだった
-  const deleteMemo = useCallback((): void => {
+  // id クリックされたIDを取得してそのIDに紐づくデータを削除させる
+  // id をpropsで受け取る必要がある
+  // この関数を使用しているのはDeleteButtonComponent
+  // DeleteButtonComponentはMemoItemで使用されるもの
+  // APIデータの取得に関しては、Home.tsxでのみ行われる
+  // データの経路としては、Home.tsx → MemoItem → DeleteButton → delete関数の引数へという流れになる
+  // propsのバケツリレーに近い。。。。グローバルステートとして管理するか？
+  // グローバルステートとして管理するべき理由は？ 更新ボタンの際も同じpropsリレーがある,表示非表示に関しても同じ処理がある
+  // 追加で最低2つは同じ処理が必要となる
+  const deleteMemo = useCallback((id): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
-    const id = '328';
+    // const id = '332';
     axiosInstance.delete(`/memo/${id}`, {
       headers: {
         Authorization: `Bearer ${token.access_token}`,

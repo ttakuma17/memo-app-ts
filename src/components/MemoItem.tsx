@@ -7,6 +7,7 @@ import { Textarea } from '@chakra-ui/textarea';
 import { RiGhost2Line } from 'react-icons/ri';
 
 import { PrimaryButton } from './PrimaryButton';
+import { DeleteButton } from './DeleteButton';
 
 // メモのアイテムの要素
 // 一覧画面のときはtextareaは編集ができないようにする : done
@@ -16,6 +17,13 @@ import { PrimaryButton } from './PrimaryButton';
 
 // 更新ボタン,削除ボタン,チェックボックス(グレーアウトするかしないか、disableにするかしないか):todo
 // checkboxをクリックで制御可能に: todo
+
+// 削除ボタンを押したときの処理を記述すること
+// 削除ボタンを押したときに、本当に削除しますか?のメッセージを表示してYesならuseGetMemoData()のdeleteMemoを実行するという流れにする
+// 必要なものとしてはアラートメッセージのコンポーネント
+// Yesなら関数実行、Noならリンクへ戻る
+
+// 更新ボタンを押したときの処理を記述すること
 
 type Props = {
   // id: string;
@@ -50,8 +58,10 @@ export const MemoItem: VFC<Props> = memo((props) => {
       </Textarea>
       <Flex pt={2} alignItems="center">
         <PrimaryButton onClick={() => alert('更新ボタン')}>更新</PrimaryButton>
-        <PrimaryButton onClick={() => alert('削除ボタン')}>削除</PrimaryButton>
-        <Checkbox isChecked={checkedFlag}>表示</Checkbox>
+        <DeleteButton />
+        <Checkbox isChecked={checkedFlag} ml={3}>
+          表示
+        </Checkbox>
       </Flex>
     </Box>
   );

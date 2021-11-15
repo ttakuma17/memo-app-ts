@@ -3,6 +3,7 @@ import { Wrap, WrapItem } from '@chakra-ui/react';
 
 import { Header } from '../components/Header';
 import { MemoItem } from '../components/MemoItem';
+
 import { useGetMemoData } from '../hooks/useGetMemoData';
 
 // key={memo.id}
@@ -14,7 +15,7 @@ import { useGetMemoData } from '../hooks/useGetMemoData';
 // map関数内の指定がおかしそう
 // その後のデータ取得は正常に行われている
 // WrapItemの間に仕込んだconsole.logで順番にidを取得する処理は行われている
-// MemoItemだけが表示されない理由が????? 要素が多きすぎて入らいないということとか？
+// MemoItemだけが表示されない理由が????? 要素が大きすぎて入らいないということとか？ → 関係ない
 
 // 対応が必要な内容
 // idの値によって、checboxの値を切り替え
@@ -25,6 +26,7 @@ export const Home: VFC = memo(() => {
   const { getAllMemos, memos } = useGetMemoData();
 
   useEffect(() => getAllMemos(), []);
+  console.log(memos);
 
   return (
     <>
