@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
 import axios, { AxiosInstance } from 'axios';
@@ -5,15 +6,17 @@ import axios, { AxiosInstance } from 'axios';
 type Memo = {
   id: string;
   title: string;
-  category?: string;
+  category: string;
   description: string;
-  date?: string;
+  date: string;
   mark_div: number;
 };
 
 export const useGetMemoData = () => {
   const [memos, setMemos] = useState<Array<Memo>>([]);
   const history = useHistory();
+  // トークンの情報を何回も記載するのが嫌やな
+  // nullでなければという前提をつける必要がある
 
   // ベースのリクエスト時にURLは多用するため、インスタンスとして定義
   const axiosInstance: AxiosInstance = axios.create({
@@ -118,13 +121,12 @@ export const useGetMemoData = () => {
 
   // メモの更新 PUT
   // axios.put(url[, data[, config]])
-  const updateMemo = useCallback((): void => {
+  const updateMemo = useCallback((id): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
-    const id = '310';
+    // const id = '310';
     axiosInstance
       .put(
-        // 400 bad request
         `/memo/${id}`,
         {
           title: '更新今日の講義について',

@@ -8,33 +8,29 @@ import { RiGhost2Line } from 'react-icons/ri';
 
 import { PrimaryButton } from './PrimaryButton';
 import { DeleteButton } from './DeleteButton';
+import { UpdateMemoModal } from './UpdateMemoModal';
 
-// メモのアイテムの要素
-// 一覧画面のときはtextareaは編集ができないようにする : done
-// メモのアイテムのデザインを整えること → 一旦mainブランチでデフォルトCSSを設定してから開発する:done
-// checkboxは現状チェックにtrueを入れている → mark_divが1ならchecked 0ならuncheckedに: done
-// MemoItemにAPIのデータを格納できるようにする:done
-
-// 更新ボタン,削除ボタン,チェックボックス(グレーアウトするかしないか、disableにするかしないか):todo
-// checkboxをクリックで制御可能に: todo
-
-// 削除ボタンを押したときの処理を記述すること
-// 削除ボタンを押したときに、本当に削除しますか?のメッセージを表示してYesならuseGetMemoData()のdeleteMemoを実行するという流れにする
-// 必要なものとしてはアラートメッセージのコンポーネント
-// Yesなら関数実行、Noならリンクへ戻る
-
-// 更新ボタンを押したときの処理を記述すること
+// Todo
+// チェックボックス(グレーアウトするかしないか、disableにするかしないか):todo
+// checkboxをクリックで編集可能にすること: todo
+// 更新ボタンで行う処理
+// 現時点ではタイトルと内容の更新のみを行えるようにする
+// checkboxについては通常画面からでもできるようにしたらOK
+// 更新ボタンを押すと、Modalが開くようにする
+// Modalを開いたときの初期値は、該当のメモのIDに紐づくTitleとDescriptionのデータを表示させる
+// 更新ボタンを押すと、作成済みのカスタムフックのupdateMemoを実行するという流れにする
+// 何はともあれ、クリックしたときにIDを取得できるような実装が必要
 
 type Props = {
-  // id: string;
+  id: string;
   title: string;
   description: string;
   mark_div: number;
-  // onClick: () => void;
+  onClick: (id: string) => void;
 };
 
 export const MemoItem: VFC<Props> = memo((props) => {
-  const { title, description, mark_div } = props;
+  const { id, title, description, mark_div, onClick } = props;
   const checkedFlag = mark_div == 1 ? true : false;
 
   return (
@@ -46,7 +42,9 @@ export const MemoItem: VFC<Props> = memo((props) => {
       h="300px"
       bg="white"
       shadow="md"
-      borderRadius="md">
+      borderRadius="md"
+      _hover={{ cursor: 'pointer', opacity: 0.8 }}
+      onClick={() => onClick(id)}>
       <Flex>
         <RiGhost2Line />
         <Heading size="md" pl={1} pb={4}>
@@ -57,7 +55,7 @@ export const MemoItem: VFC<Props> = memo((props) => {
         {description}
       </Textarea>
       <Flex pt={2} alignItems="center">
-        <PrimaryButton onClick={() => alert('更新ボタン')}>更新</PrimaryButton>
+        <PrimaryButton onClick={() => alert('更新')}>更新</PrimaryButton>
         <DeleteButton />
         <Checkbox isChecked={checkedFlag} ml={3}>
           表示

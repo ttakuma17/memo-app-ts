@@ -10,21 +10,12 @@ import {
 import React, { memo } from 'react';
 import { useGetMemoData } from '../hooks/useGetMemoData';
 
-// 型の不一致を解消しないといけない : 解消done
-//    leastDestructiveRef={cancelRef} 36 付近
-// MutableRefObject<undefined>を型RefObject<FocusableElement>に割り当てることはできません
-// プロパティ current の方に互換性はありません
-// 型undefinedを型'FocusableElement|null'に割り当てることはできません
-
-//  <Button ref={cancelRef} onClick={onClose}> 49付近
-// MutableRefObject<undefined>を型RefObject<FocusableElement>に割り当てることはできません
-// プロパティ current の方に互換性はありません
-// 型undefinedを型'HTMLButtonElement|null'に割り当てることはできません
-
+// Todo
 // delete関数に対してidのデータを紐付ける処理を実装すれば完成となる → どういう管理方法にすべきかが定まっていないので保留とする
+// 既存のライブラリで作成されたコンポーネントに自分の定義したpropsを引き渡したい、新たに追加すると型定義にありませんというエラー
+// こういう場合の対処法を考える必要がある
 
 export const DeleteButton = memo(() => {
-  // ブローバルステートに格納したidを呼び出す
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
@@ -32,7 +23,7 @@ export const DeleteButton = memo(() => {
 
   return (
     <>
-      <Button colorScheme="red" onClick={() => setIsOpen(true)}>
+      <Button colorScheme="blackAlpha" onClick={() => setIsOpen(true)}>
         削除
       </Button>
 
@@ -51,7 +42,10 @@ export const DeleteButton = memo(() => {
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button
+                colorScheme="blackAlpha"
+                ref={cancelRef}
+                onClick={onClose}>
                 いいえ
               </Button>
               <Button

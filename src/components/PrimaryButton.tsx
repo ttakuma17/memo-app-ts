@@ -3,7 +3,7 @@ import React, { memo, ReactNode, VFC } from 'react';
 
 type Props = {
   children: ReactNode;
-  onClick: () => void;
+  onClick: (id: any) => void;
 };
 
 // ボタンに実装する処理
