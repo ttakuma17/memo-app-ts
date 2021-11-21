@@ -11,6 +11,9 @@ export const Header: VFC = memo(() => {
   // Link メモ一覧を押したときの処理を記載する関数
   const onClickHome = useCallback(() => history.push('/home'), []);
 
+  // Link 新規メモを押したときの処理を記載する関数
+  const onClicNewMemo = useCallback(() => history.push('/new'), []);
+
   // Link ヘルプを押したときの処理を記載する関数
   const onClickHelp = useCallback(() => history.push('help'), []);
 
@@ -29,7 +32,12 @@ export const Header: VFC = memo(() => {
         <Spacer />
         <Flex align="center">
           <Box pr={4}>
-            <Link onClick={onClickHome}>メモ一覧</Link>
+            <Link onClick={onClicNewMemo}>新規メモ</Link>
+          </Box>
+          <Box pr={4}>
+            <Link onClick={onClickHome} textAlign="center">
+              メモ一覧
+            </Link>
           </Box>
           <Box pr={4}>
             <Link onClick={onClickHelp}>ヘルプ</Link>

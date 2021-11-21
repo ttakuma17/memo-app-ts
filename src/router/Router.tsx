@@ -1,5 +1,6 @@
 import React, { VFC, memo } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { RegisterMemo } from '../components/RegisterMemo';
 
 import { Help } from '../pages/Help';
 import { Home } from '../pages/Home';
@@ -19,6 +20,9 @@ export const Router: VFC = memo(() => {
         </Route>
         <Route path="/home">
           <Home />
+        </Route>
+        <Route path="/new">
+          <RegisterMemo />
         </Route>
         <Route path="/help">
           <Help />

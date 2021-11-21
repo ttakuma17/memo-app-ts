@@ -2,6 +2,7 @@
 import { useCallback, useState } from 'react';
 import { useHistory } from 'react-router';
 import axios, { AxiosInstance } from 'axios';
+import { useToast } from '@chakra-ui/toast';
 
 type Memo = {
   id: string;
@@ -12,9 +13,19 @@ type Memo = {
   mark_div: number;
 };
 
+// 正常にToastが表示されることを確認
+
 export const useGetMemoData = () => {
   const [memos, setMemos] = useState<Array<Memo>>([]);
   const history = useHistory();
+  // 成功時、失敗時などのToast処理の追加を実装
+  const toast = useToast();
+  // toast({
+  //   title: "",
+  //   status: status,
+  //   isClosable: true,
+  // });
+
   // トークンの情報を何回も記載するのが嫌やな
   // nullでなければという前提をつける必要がある
 
@@ -44,12 +55,23 @@ export const useGetMemoData = () => {
         // 取得した情報をJSON形式へ変換し、変数へ格納する
         const token = JSON.stringify(response.data);
         localStorage.setItem('token', token);
+        toast({
+          title: 'ログインに成功しました',
+          status: 'success',
+          isClosable: true,
+        });
+        //
         // 保存が終わったらhomeページへルーティングする(後ほど実装とする)
         history.push('/home');
       })
       .catch((error) => {
         // 情報が一致しない場合にcatchへ処理が遷移していることを確認
         console.log(error);
+        toast({
+          title: 'ログインに失敗しました',
+          status: 'error',
+          isClosable: true,
+        });
         // 実装が必要な処理「取得したトークン情報をローカルストレージへ保存する」
         // ログインページへルーティング
         // わかりやすいエラーメッセージを表示させる(toast系の処理の作成後実装)
@@ -84,22 +106,29 @@ export const useGetMemoData = () => {
       .catch((error) => {
         // エラー時のロジックはほぼ共通化できるため、後ほど実装
         console.log(error);
+        toast({
+          title: 'メモデータの取得に失敗しました',
+          status: 'error',
+          isClosable: true,
+        });
+        history.push('/');
       });
   }, []);
 
   // メモの新規登録 POST
-  const createNewMemo = useCallback((): void => {
+  // カテゴリーと日付に関しては活用方法を検討した後に利用 : 現状は固定値で対応
+  const createNewMemo = useCallback((title, description, value): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
     axiosInstance
       .post(
         '/memo',
         {
-          title: '今日の講義について',
-          category: '授業メモ',
-          description: '第９回の授業メモです\\nこんなことしました。',
+          title: title,
+          category: 'カテゴリ',
+          description: description,
           date: '2021/08/01',
-          mark_div: 1,
+          mark_div: value,
         },
         {
           headers: {
@@ -110,10 +139,24 @@ export const useGetMemoData = () => {
       .then((response) => {
         // レスポンスとして期待するデータ
         console.log(response);
+        // 登録が完了したことを示すメッセージの表示
+        toast({
+          title: 'メモの登録が完了しました',
+          status: 'success',
+          isClosable: true,
+        });
+        // Homeコンポーネントへのルーティング
+        history.push('/home');
       })
       .catch((error) => {
         // エラー時のロジックはほぼ共通化できるため、後ほど実装
         console.log(error);
+        toast({
+          title: 'メモの登録に失敗しました。もう一度入力してください',
+          status: 'error',
+          isClosable: true,
+        });
+        history.push('/new');
       });
   }, []);
 
@@ -144,10 +187,22 @@ export const useGetMemoData = () => {
       .then((response) => {
         // レスポンスとして期待するデータ
         console.log(response);
+        toast({
+          title: 'メモデータを更新しました',
+          status: 'success',
+          isClosable: true,
+        });
+        history.push('/');
       })
       .catch((error) => {
         // エラー時のロジックはほぼ共通化できるため、後ほど実装
         console.log(error);
+        toast({
+          title: 'メモデータの更新に失敗しました',
+          status: 'error',
+          isClosable: true,
+        });
+        history.push('/');
       });
   }, []);
 
@@ -165,11 +220,32 @@ export const useGetMemoData = () => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
     // const id = '332';
-    axiosInstance.delete(`/memo/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token.access_token}`,
-      },
-    });
+    axiosInstance
+      .delete(`/memo/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token.access_token}`,
+        },
+      })
+      .then((response) => {
+        // レスポンスとして期待するデータ
+        console.log(response);
+        toast({
+          title: 'メモの削除が完了しました',
+          status: 'success',
+          isClosable: true,
+        });
+        history.push('/home');
+      })
+      .catch((error) => {
+        // エラー時のロジックはほぼ共通化できるため、後ほど実装
+        console.log(error);
+        toast({
+          title: 'メモの削除に失敗しました',
+          status: 'error',
+          isClosable: true,
+        });
+        history.push('/home');
+      });
   }, []);
 
   return {
