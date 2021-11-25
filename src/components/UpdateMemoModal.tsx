@@ -24,6 +24,7 @@ type Props = {
 };
 
 // idの連携について
+// Todo：textareaの編集ができない問題が発生していること
 
 export const UpdateMemoModal: VFC<Props> = memo((props) => {
   const { memos, isOpen, onClose } = props;
@@ -43,7 +44,7 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
   };
 
   const onChangeDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setTitle(e.target.value);
+    setDescription(e.target.value);
   };
 
   // コンポーネントの中身を記載
@@ -78,8 +79,11 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
         </ModalBody>
         <ModalFooter>
           <PrimaryButton
-            onClick={() => {
-              updateMemo(id);
+            onClick={async () => {
+              // メッセージが表示される前に、モーダルが閉じてしまうところは制御したい
+              await updateMemo(id, title, description);
+              // 画面の再レンダリングが走らず、更新したのに読み込みをかけなければ画面の更新がされていない
+              await onClose();
             }}>
             更新
           </PrimaryButton>

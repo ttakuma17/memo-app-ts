@@ -7,19 +7,11 @@ import { Textarea } from '@chakra-ui/textarea';
 import { RiGhost2Line } from 'react-icons/ri';
 
 import { PrimaryButton } from './PrimaryButton';
-import { DeleteButton } from './DeleteButton';
-import { UpdateMemoModal } from './UpdateMemoModal';
+import { DeleteFunction } from './DeleteFunction';
 
 // Todo
 // チェックボックス(グレーアウトするかしないか、disableにするかしないか):todo
 // checkboxをクリックで編集可能にすること: todo
-// 更新ボタンで行う処理
-// 現時点ではタイトルと内容の更新のみを行えるようにする
-// checkboxについては通常画面からでもできるようにしたらOK
-// 更新ボタンを押すと、Modalが開くようにする
-// Modalを開いたときの初期値は、該当のメモのIDに紐づくTitleとDescriptionのデータを表示させる
-// 更新ボタンを押すと、作成済みのカスタムフックのupdateMemoを実行するという流れにする
-// 何はともあれ、クリックしたときにIDを取得できるような実装が必要
 
 type Props = {
   id: string;
@@ -28,6 +20,9 @@ type Props = {
   mark_div: number;
   onClick: (id: string) => void;
 };
+
+// MemoItemに格納されたid情報をHomeコンポーネントへ返す処理が必要になる
+// どのメモがおされたのかを判定したいのでmemoitem側でonClick関数が必要になる
 
 export const MemoItem: VFC<Props> = memo((props) => {
   const { id, title, description, mark_div, onClick } = props;
@@ -43,8 +38,7 @@ export const MemoItem: VFC<Props> = memo((props) => {
       bg="white"
       shadow="md"
       borderRadius="md"
-      _hover={{ cursor: 'pointer', opacity: 0.8 }}
-      onClick={() => onClick(id)}>
+      _hover={{ cursor: 'pointer', opacity: 0.8 }}>
       <Flex>
         <RiGhost2Line />
         <Heading size="md" pl={1} pb={4}>
@@ -55,8 +49,8 @@ export const MemoItem: VFC<Props> = memo((props) => {
         {description}
       </Textarea>
       <Flex pt={2} alignItems="center">
-        <PrimaryButton onClick={() => alert('更新')}>更新</PrimaryButton>
-        <DeleteButton />
+        <PrimaryButton onClick={() => onClick(id)}>更新</PrimaryButton>
+        <DeleteFunction onClick={() => onClick(id)} />
         <Checkbox isChecked={checkedFlag} ml={3}>
           表示
         </Checkbox>

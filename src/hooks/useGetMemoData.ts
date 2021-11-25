@@ -164,7 +164,7 @@ export const useGetMemoData = () => {
 
   // メモの更新 PUT
   // axios.put(url[, data[, config]])
-  const updateMemo = useCallback((id): void => {
+  const updateMemo = useCallback((id, title, description): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
     // const id = '310';
@@ -172,9 +172,9 @@ export const useGetMemoData = () => {
       .put(
         `/memo/${id}`,
         {
-          title: '更新今日の講義について',
+          title: title,
           category: '更新授業メモ',
-          description: '更新第９回の授業メモです\\nこんなことしました。',
+          description: description,
           date: '2021/08/01',
           mark_div: 0,
         },
@@ -192,7 +192,6 @@ export const useGetMemoData = () => {
           status: 'success',
           isClosable: true,
         });
-        history.push('/');
       })
       .catch((error) => {
         // エラー時のロジックはほぼ共通化できるため、後ほど実装
@@ -202,7 +201,6 @@ export const useGetMemoData = () => {
           status: 'error',
           isClosable: true,
         });
-        history.push('/');
       });
   }, []);
 

@@ -7,15 +7,23 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
 } from '@chakra-ui/modal';
-import React, { memo } from 'react';
+import React, { memo, VFC } from 'react';
 import { useGetMemoData } from '../hooks/useGetMemoData';
+// import { Memo } from '../types/api/memo';
 
 // Todo
 // delete関数に対してidのデータを紐付ける処理を実装すれば完成となる → どういう管理方法にすべきかが定まっていないので保留とする
 // 既存のライブラリで作成されたコンポーネントに自分の定義したpropsを引き渡したい、新たに追加すると型定義にありませんというエラー
 // こういう場合の対処法を考える必要がある
 
-export const DeleteButton = memo(() => {
+// idが見つかりませんのエラー発生中
+
+type Props = {
+  onClick: () => void;
+};
+
+export const DeleteFunction: VFC<Props> = memo((props) => {
+  const { onClick } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
@@ -23,7 +31,12 @@ export const DeleteButton = memo(() => {
 
   return (
     <>
-      <Button colorScheme="blackAlpha" onClick={() => setIsOpen(true)}>
+      <Button
+        colorScheme="blackAlpha"
+        onClick={() => {
+          onClick();
+          setIsOpen(true);
+        }}>
         削除
       </Button>
 
@@ -50,7 +63,7 @@ export const DeleteButton = memo(() => {
               </Button>
               <Button
                 colorScheme="red"
-                onClick={(id) => {
+                onClick={() => {
                   deleteMemo(id);
                   onClose();
                 }}
@@ -65,6 +78,6 @@ export const DeleteButton = memo(() => {
   );
 });
 
-DeleteButton.displayName = 'DeleteButton';
+DeleteFunction.displayName = 'DeleteFunction';
 
 // https://chakra-ui.com/docs/overlay/alert-dialog

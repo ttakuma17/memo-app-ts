@@ -6,6 +6,7 @@ import { Radio, RadioGroup } from '@chakra-ui/radio';
 import { Textarea } from '@chakra-ui/textarea';
 import { PrimaryButton } from './PrimaryButton';
 import { useGetMemoData } from '../hooks/useGetMemoData';
+import { useHistory } from 'react-router';
 
 export const RegisterMemo: VFC = memo(() => {
   // 実装する機能の整理
@@ -24,6 +25,8 @@ export const RegisterMemo: VFC = memo(() => {
   // ボタンを押したときの処理:カスタムフックの呼び出し
   // onClickを押したときに、バックエンド側に新しいMemoを追加する関数を実行
   const { createNewMemo } = useGetMemoData();
+  // homeのルート
+  const history = useHistory();
 
   return (
     <Flex align="center" justify="center" height="100vh">
@@ -64,6 +67,12 @@ export const RegisterMemo: VFC = memo(() => {
               createNewMemo(title, description, mark_div);
             }}>
             登録
+          </PrimaryButton>
+          <PrimaryButton
+            onClick={() => {
+              history.push('/home');
+            }}>
+            戻る
           </PrimaryButton>
         </Flex>
       </Box>
