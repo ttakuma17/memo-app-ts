@@ -19,11 +19,11 @@ import { useGetMemoData } from '../hooks/useGetMemoData';
 // idが見つかりませんのエラー発生中
 
 type Props = {
-  onClick: () => void;
+  id: string;
 };
 
 export const DeleteFunction: VFC<Props> = memo((props) => {
-  const { onClick } = props;
+  const { id } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
@@ -34,7 +34,7 @@ export const DeleteFunction: VFC<Props> = memo((props) => {
       <Button
         colorScheme="blackAlpha"
         onClick={() => {
-          onClick();
+          console.log(id); // idは取れた
           setIsOpen(true);
         }}>
         削除

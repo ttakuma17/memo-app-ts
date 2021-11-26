@@ -72,7 +72,7 @@ export const RegisterMemo: VFC = memo(() => {
             onClick={() => {
               history.push('/home');
             }}>
-            戻る
+            一覧へ戻る
           </PrimaryButton>
         </Flex>
       </Box>

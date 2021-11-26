@@ -232,7 +232,6 @@ export const useGetMemoData = () => {
           status: 'success',
           isClosable: true,
         });
-        history.push('/home');
       })
       .catch((error) => {
         // エラー時のロジックはほぼ共通化できるため、後ほど実装
@@ -242,7 +241,6 @@ export const useGetMemoData = () => {
           status: 'error',
           isClosable: true,
         });
-        history.push('/home');
       });
   }, []);
 

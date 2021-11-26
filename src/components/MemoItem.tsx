@@ -21,12 +21,9 @@ type Props = {
   onClick: (id: string) => void;
 };
 
-// MemoItemに格納されたid情報をHomeコンポーネントへ返す処理が必要になる
-// どのメモがおされたのかを判定したいのでmemoitem側でonClick関数が必要になる
-
 export const MemoItem: VFC<Props> = memo((props) => {
   const { id, title, description, mark_div, onClick } = props;
-  const checkedFlag = mark_div == 1 ? true : false;
+  const checkedFlag = mark_div == 1 ? true : false; // stateで管理して変更可能にする
 
   return (
     <Box
@@ -45,12 +42,17 @@ export const MemoItem: VFC<Props> = memo((props) => {
           {title}
         </Heading>
       </Flex>
-      <Textarea size="sm" resize="none" h="180px" isReadOnly={true}>
+      <Textarea
+        size="sm"
+        resize="none"
+        h="180px"
+        isReadOnly={true}
+        autoFocus={false}>
         {description}
       </Textarea>
       <Flex pt={2} alignItems="center">
         <PrimaryButton onClick={() => onClick(id)}>更新</PrimaryButton>
-        <DeleteFunction onClick={() => onClick(id)} />
+        <DeleteFunction id={id} />
         <Checkbox isChecked={checkedFlag} ml={3}>
           表示
         </Checkbox>

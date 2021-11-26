@@ -38,7 +38,7 @@ export const Home: VFC = memo(() => {
     [memos, onOpen, onSelectMemo]
   );
 
-  console.log(selectedMemo); // メモ情報は取れていることを確認
+  // console.log(selectedMemo); // メモ情報は取れていることを確認
 
   return (
     <>

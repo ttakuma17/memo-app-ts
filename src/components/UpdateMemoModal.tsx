@@ -23,18 +23,14 @@ type Props = {
   isOpen: boolean;
 };
 
-// idの連携について
-// Todo：textareaの編集ができない問題が発生していること
-
 export const UpdateMemoModal: VFC<Props> = memo((props) => {
+  // propsにmemosを渡している → updateの処理が完了すると値が変わっているはずなので再レンダリングされてほしい
   const { memos, isOpen, onClose } = props;
   const { updateMemo } = useGetMemoData();
-  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    setId(memos?.id ?? '');
     setTitle(memos?.title ?? '');
     setDescription(memos?.description ?? '');
   }, [memos]);
@@ -49,7 +45,6 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
 
   // コンポーネントの中身を記載
   return (
-    // ChakraUIのModal機能を利用して判断する
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -79,11 +74,11 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
         </ModalBody>
         <ModalFooter>
           <PrimaryButton
-            onClick={async () => {
+            onClick={() => {
               // メッセージが表示される前に、モーダルが閉じてしまうところは制御したい
-              await updateMemo(id, title, description);
-              // 画面の再レンダリングが走らず、更新したのに読み込みをかけなければ画面の更新がされていない
-              await onClose();
+              updateMemo(memos?.id, title, description);
+              // コンポーネントの再レンダリングが走らず、更新したのに読み込みをかけなければ画面の更新がされていない
+              onClose();
             }}>
             更新
           </PrimaryButton>
