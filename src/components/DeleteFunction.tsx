@@ -63,8 +63,8 @@ export const DeleteFunction: VFC<Props> = memo((props) => {
               </Button>
               <Button
                 colorScheme="red"
-                onClick={() => {
-                  deleteMemo(id);
+                onClick={async () => {
+                  await deleteMemo(id);
                   onClose();
                 }}
                 ml={3}>

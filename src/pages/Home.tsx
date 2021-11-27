@@ -25,8 +25,10 @@ export const Home: VFC = memo(() => {
   // Modal用のChakraUI - hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect(() => getAllMemos(), []);
+  useEffect(() => getAllMemos(), [memos]);
   // console.log(memos);
+  // 再レンダリングの仕組みについては復習が必要
+  // 依存配列にmemosを追加していなかったので、読み込みされなかった模様
 
   // idの取得はできたが処理として、複雑になりそうなのでカスタムフックへ
   const onClickMemo = useCallback(
@@ -39,6 +41,8 @@ export const Home: VFC = memo(() => {
   );
 
   // console.log(selectedMemo); // メモ情報は取れていることを確認
+  // memosが更新されているかどうか memos をuseEffectの依存配列に追加して更新できているか
+  // memosが更新されていなさそうなので一覧が更新されないと判断できる
 
   return (
     <>
