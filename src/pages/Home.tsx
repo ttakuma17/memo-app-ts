@@ -15,8 +15,6 @@ import { UpdateMemoModal } from '../components/UpdateMemoModal';
 // onClickを押したときにidとmemosのデータを取得して開く処理を担当する関数が必要
 // そのときに登場するのがonSelectMemoの処理となる
 
-// Modalの出し分けをしたい
-
 export const Home: VFC = memo(() => {
   const { getAllMemos, memos } = useGetMemoData();
   const { selectedMemo, onSelectMemo } = useSelectMemo();
@@ -26,14 +24,17 @@ export const Home: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => getAllMemos(), [memos]);
+  // 依存配列にgetAllMemosのみを追加してもDeleteの再レンダリングはされなかった
+  // updateボタンによる処理で再レンダリングがされていないのがなぜか
   // console.log(memos);
   // 再レンダリングの仕組みについては復習が必要
   // 依存配列にmemosを追加していなかったので、読み込みされなかった模様
+  // 削除のときは再レンダリングされるが、更新のときは再レンダリングされない
 
   // idの取得はできたが処理として、複雑になりそうなのでカスタムフックへ
   const onClickMemo = useCallback(
     (id: string) => {
-      console.log(id);
+      // console.log(id);
       onSelectMemo({ id, memos, onOpen });
       onOpen();
     },
@@ -43,6 +44,10 @@ export const Home: VFC = memo(() => {
   // console.log(selectedMemo); // メモ情報は取れていることを確認
   // memosが更新されているかどうか memos をuseEffectの依存配列に追加して更新できているか
   // memosが更新されていなさそうなので一覧が更新されないと判断できる
+
+  // Homeページで実装する
+  // APIデータの取得中は取得中はローディング処理を実装したい
+  // データ取得が完了したら、それぞれのメモアイテムの取得を行う
 
   return (
     <>

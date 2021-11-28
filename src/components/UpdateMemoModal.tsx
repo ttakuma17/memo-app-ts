@@ -26,6 +26,7 @@ type Props = {
 export const UpdateMemoModal: VFC<Props> = memo((props) => {
   // propsにmemosを渡している → updateの処理が完了すると値が変わっているはずなので再レンダリングされてほしい
   const { memos, isOpen, onClose } = props;
+  console.log(memos); // データの取得はできている textareaの変更を検知してupdateMemoModalに対して再レンダリングは行われていることを確認
   const { updateMemo } = useGetMemoData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -34,16 +35,20 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
     setTitle(memos?.title ?? '');
     setDescription(memos?.description ?? '');
   }, [memos]);
+  // selectされたmemoを管理するstateがほしい → そのデータが変わったときに再レンダリングされるようにuseEffectを実行する
+  // 依存配列にtitleとdescriptionを追加したら変更が加えられなくなったので違う
+  // 更新後に関してはモーダルの画面にはAPIデータが反映されている数秒立つとgetAllmemoの関数内でエラーが起きることがある？
 
   const onChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const onChangeDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(e.target.value); // 変更の検知はできている
     setDescription(e.target.value);
+    // console.log(description);
   };
 
-  // コンポーネントの中身を記載
   return (
     <Modal
       isOpen={isOpen}
@@ -74,9 +79,9 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
         </ModalBody>
         <ModalFooter>
           <PrimaryButton
-            onClick={() => {
+            onClick={async () => {
               // メッセージが表示される前に、モーダルが閉じてしまうところは制御したい
-              updateMemo(memos?.id, title, description);
+              await updateMemo(memos?.id, title, description);
               // コンポーネントの再レンダリングが走らず、更新したのに読み込みをかけなければ画面の更新がされていない
               onClose();
             }}>

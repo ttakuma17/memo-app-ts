@@ -4,6 +4,8 @@ import React, { memo, ReactNode, VFC } from 'react';
 type Props = {
   children: ReactNode;
   onClick: (id: any) => void;
+  disabled?: boolean;
+  loading?: boolean;
 };
 
 // ボタンに実装する処理
