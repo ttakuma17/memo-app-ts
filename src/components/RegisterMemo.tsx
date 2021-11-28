@@ -5,7 +5,7 @@ import { Box, Divider, Flex, Heading, Stack } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import { Textarea } from '@chakra-ui/textarea';
 import { PrimaryButton } from './PrimaryButton';
-import { useGetMemoData } from '../hooks/useGetMemoData';
+import { useMemoData } from '../hooks/useMemoData';
 import { useHistory } from 'react-router';
 
 export const RegisterMemo: VFC = memo(() => {
@@ -24,7 +24,7 @@ export const RegisterMemo: VFC = memo(() => {
   const [value, setValue] = useState('1');
   // ボタンを押したときの処理:カスタムフックの呼び出し
   // onClickを押したときに、バックエンド側に新しいMemoを追加する関数を実行
-  const { createNewMemo } = useGetMemoData();
+  const { createNewMemo } = useMemoData();
   // homeのルート
   const history = useHistory();
 

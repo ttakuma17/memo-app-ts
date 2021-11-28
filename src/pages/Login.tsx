@@ -4,7 +4,7 @@ import { Box, Flex, Heading } from '@chakra-ui/layout';
 import { Center } from '@chakra-ui/react';
 
 import { PrimaryButton } from '../components/PrimaryButton';
-import { useGetMemoData } from '../hooks/useGetMemoData';
+import { useMemoData } from '../hooks/useMemoData';
 
 export const Login: VFC = memo(() => {
   // inputされたメールアドレスをステートとして管理 email
@@ -16,7 +16,7 @@ export const Login: VFC = memo(() => {
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) =>
     setPassword(e.target.value);
   // PrimaryButtonを押したときに、メールとパスワードの入力値を受け取って、getTokenを実行
-  const { getToken } = useGetMemoData();
+  const { getToken } = useMemoData();
   return (
     <>
       <Flex align="center" justify="center" h="100vh">

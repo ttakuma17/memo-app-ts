@@ -13,20 +13,13 @@ type Memo = {
   mark_div: number;
 };
 
-// 正常にToastが表示されることを確認
-
-export const useGetMemoData = () => {
+// バックエンドのmemoデータを取得する際に利用するカスタムフック
+export const useMemoData = () => {
   const [memos, setMemos] = useState<Array<Memo>>([]);
   const history = useHistory();
-  // 成功時、失敗時などのToast処理の追加を実装
   const toast = useToast();
-  // toast({
-  //   title: "",
-  //   status: status,
-  //   isClosable: true,
-  // });
 
-  // トークンの情報を何回も記載するのが嫌やな
+  // トークンの情報を何回も記載するのが嫌やな → カスタムフックで分けて、取得したデータを共有する流れにする
   // nullでなければという前提をつける必要がある
 
   // ベースのリクエスト時にURLは多用するため、インスタンスとして定義
@@ -36,16 +29,10 @@ export const useGetMemoData = () => {
     headers: { 'Content-Type': 'application/json' },
   });
 
-  // 固定値で意図したリクエストとレスポンスを得られるように実装する
-  // 制御ができるようになったらコンポーネント側の入力値を利用してリクエストするよう変更
-
   // トークンを発行する関数を定義 /login に対するAPIリクエスト[POST]
   const getToken = useCallback((email, password): void => {
     axiosInstance
       .post('/login', {
-        // inputボックスに入れた値を代入できるようにする必要がある
-        // email: 'ttakuma@example.com',
-        // password: '12345678',
         email: email,
         password: password,
       })
@@ -60,8 +47,6 @@ export const useGetMemoData = () => {
           status: 'success',
           isClosable: true,
         });
-        //
-        // 保存が終わったらhomeページへルーティングする(後ほど実装とする)
         history.push('/home');
       })
       .catch((error) => {
@@ -72,13 +57,11 @@ export const useGetMemoData = () => {
           status: 'error',
           isClosable: true,
         });
-        // 実装が必要な処理「取得したトークン情報をローカルストレージへ保存する」
         // ログインページへルーティング
-        // わかりやすいエラーメッセージを表示させる(toast系の処理の作成後実装)
       });
   }, []);
 
-  // メモの一覧を取得 GET
+  // メモの一覧を取得するために利用する関数
   const getAllMemos = useCallback((): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
@@ -99,12 +82,9 @@ export const useGetMemoData = () => {
         },
       })
       .then((response) => {
-        // レスポンスとして期待するデータ
-        // console.log(response);
         setMemos(response.data);
       })
       .catch((error) => {
-        // エラー時のロジックはほぼ共通化できるため、後ほど実装
         console.log(error);
         toast({
           title: 'メモデータの取得に失敗しました',
@@ -115,8 +95,7 @@ export const useGetMemoData = () => {
       });
   }, []);
 
-  // メモの新規登録 POST
-  // カテゴリーと日付に関しては活用方法を検討した後に利用 : 現状は固定値で対応
+  // メモの新規登録を行う関数
   const createNewMemo = useCallback((title, description, value): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
@@ -137,19 +116,15 @@ export const useGetMemoData = () => {
         }
       )
       .then((response) => {
-        // レスポンスとして期待するデータ
         console.log(response);
-        // 登録が完了したことを示すメッセージの表示
         toast({
           title: 'メモの登録が完了しました',
           status: 'success',
           isClosable: true,
         });
-        // Homeコンポーネントへのルーティング
         history.push('/home');
       })
       .catch((error) => {
-        // エラー時のロジックはほぼ共通化できるため、後ほど実装
         console.log(error);
         toast({
           title: 'メモの登録に失敗しました。もう一度入力してください',
@@ -160,10 +135,7 @@ export const useGetMemoData = () => {
       });
   }, []);
 
-  // ここまではOK
-
-  // メモの更新 PUT
-  // axios.put(url[, data[, config]])
+  // メモの更新を行うために利用する関数
   const updateMemo = useCallback((id, title, description): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);
@@ -204,16 +176,7 @@ export const useGetMemoData = () => {
       });
   }, []);
 
-  // メモの削除 DELETE 問題箇所がidの指定と共通しているので一旦保留 同様のBadRequestが発生 → 日付の指定がおかしいだけだった
-  // id クリックされたIDを取得してそのIDに紐づくデータを削除させる
-  // id をpropsで受け取る必要がある
-  // この関数を使用しているのはDeleteButtonComponent
-  // DeleteButtonComponentはMemoItemで使用されるもの
-  // APIデータの取得に関しては、Home.tsxでのみ行われる
-  // データの経路としては、Home.tsx → MemoItem → DeleteButton → delete関数の引数へという流れになる
-  // propsのバケツリレーに近い。。。。グローバルステートとして管理するか？
-  // グローバルステートとして管理するべき理由は？ 更新ボタンの際も同じpropsリレーがある,表示非表示に関しても同じ処理がある
-  // 追加で最低2つは同じ処理が必要となる
+  // メモを削除するときに利用する関数
   const deleteMemo = useCallback((id): void => {
     const tokenInLocalStorage: any = localStorage.getItem('token');
     const token: any = JSON.parse(tokenInLocalStorage);

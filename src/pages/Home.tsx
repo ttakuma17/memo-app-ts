@@ -4,7 +4,7 @@ import { Wrap, WrapItem, useDisclosure } from '@chakra-ui/react';
 import { Header } from '../components/Header';
 import { MemoItem } from '../components/MemoItem';
 
-import { useGetMemoData } from '../hooks/useGetMemoData';
+import { useMemoData } from '../hooks/useMemoData';
 import { useSelectMemo } from '../hooks/useSelectMemo';
 import { UpdateMemoModal } from '../components/UpdateMemoModal';
 
@@ -16,7 +16,7 @@ import { UpdateMemoModal } from '../components/UpdateMemoModal';
 // そのときに登場するのがonSelectMemoの処理となる
 
 export const Home: VFC = memo(() => {
-  const { getAllMemos, memos } = useGetMemoData();
+  const { getAllMemos, memos } = useMemoData();
   const { selectedMemo, onSelectMemo } = useSelectMemo();
   // メモ情報が保存されているHooksがほしい
   // 引数としてmemo情報を渡して上げるときに必要となる

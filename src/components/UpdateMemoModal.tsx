@@ -14,7 +14,7 @@ import {
 import { Textarea } from '@chakra-ui/textarea';
 import { Memo } from '../types/api/memo';
 import { PrimaryButton } from './PrimaryButton';
-import { useGetMemoData } from '../hooks/useGetMemoData';
+import { useMemoData } from '../hooks/useMemoData';
 
 // Modalに表示させる情報はtitleとdescriptionのみでよい
 type Props = {
@@ -27,7 +27,7 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
   // propsにmemosを渡している → updateの処理が完了すると値が変わっているはずなので再レンダリングされてほしい
   const { memos, isOpen, onClose } = props;
   console.log(memos); // データの取得はできている textareaの変更を検知してupdateMemoModalに対して再レンダリングは行われていることを確認
-  const { updateMemo } = useGetMemoData();
+  const { updateMemo } = useMemoData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 

@@ -8,7 +8,7 @@ import {
   AlertDialogOverlay,
 } from '@chakra-ui/modal';
 import React, { memo, VFC } from 'react';
-import { useGetMemoData } from '../hooks/useGetMemoData';
+import { useMemoData } from '../hooks/useMemoData';
 // import { Memo } from '../types/api/memo';
 
 // Todo
@@ -27,7 +27,7 @@ export const DeleteFunction: VFC<Props> = memo((props) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
-  const { deleteMemo } = useGetMemoData();
+  const { deleteMemo } = useMemoData();
 
   return (
     <>
