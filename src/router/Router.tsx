@@ -18,13 +18,13 @@ export const Router: VFC = memo(() => {
         <Route exact path="/">
           <Login />
         </Route>
-        <Route path="/home">
+        <Route exact path="/home">
           <Home />
         </Route>
-        <Route path="/new">
+        <Route exact path="/new">
           <RegisterMemo />
         </Route>
-        <Route path="/help">
+        <Route exact path="/help">
           <Help />
         </Route>
         <Route path="*">

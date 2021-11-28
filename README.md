@@ -180,6 +180,4 @@ https://chakra-ui.com/docs/feedback/alert
 404 ページへのリンクが上手く機能していないので修正
 ルートからのアクセス時は存在しないリンクへの遷移は完了
 
-new
-home
-help に続けて記載すると 404 へ遷移しない → 要修正
+new/home/help に続けて記載すると 404 へ遷移しない → 要修正
