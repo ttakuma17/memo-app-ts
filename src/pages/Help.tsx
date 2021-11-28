@@ -79,6 +79,9 @@ export const Help: VFC = memo(() => {
                 <p>ヘルプページ</p>
                 <ol>
                   <li>機能修正が終わり次第、メモアプリの説明を追加する</li>
+                  <li>
+                    参考とするヘルプページを決めて、レイアウトなどを整える
+                  </li>
                 </ol>
               </TabPanel>
               <TabPanel>
