@@ -19,7 +19,7 @@ export const useMemoData = () => {
   const history = useHistory();
   const toast = useToast();
 
-  // トークンの情報を何回も記載するのが嫌やな → カスタムフックで分けて、取得したデータを共有する流れにする
+  // トークンの情報を何回も記載するのが嫌やな → カスタムフックで分けて、取得したデータを共有する流れにできるよう修正する
   // nullでなければという前提をつける必要がある
 
   // ベースのリクエスト時にURLは多用するため、インスタンスとして定義
@@ -116,7 +116,7 @@ export const useMemoData = () => {
         }
       )
       .then((response) => {
-        console.log(response);
+        console.log(response); // 変更を加えたデータのみがレスポンスとして返ってくる
         toast({
           title: 'メモの登録が完了しました',
           status: 'success',
@@ -158,7 +158,7 @@ export const useMemoData = () => {
       )
       .then((response) => {
         // レスポンスとして期待するデータ
-        console.log(response);
+        console.log(response); // 変更を加えたデータのみがレスポンスとして返ってくる
         toast({
           title: 'メモデータを更新しました',
           status: 'success',

@@ -18,23 +18,23 @@ import { useMemoData } from '../hooks/useMemoData';
 
 // Modalに表示させる情報はtitleとdescriptionのみでよい
 type Props = {
-  memos: Memo | null;
+  selectedMemo: Memo | null;
   onClose: () => void;
   isOpen: boolean;
 };
 
 export const UpdateMemoModal: VFC<Props> = memo((props) => {
   // propsにmemosを渡している → updateの処理が完了すると値が変わっているはずなので再レンダリングされてほしい
-  const { memos, isOpen, onClose } = props;
-  console.log(memos); // データの取得はできている textareaの変更を検知してupdateMemoModalに対して再レンダリングは行われていることを確認
+  const { selectedMemo, isOpen, onClose } = props;
+  console.log(selectedMemo); // データの取得はできている textareaの変更を検知してupdateMemoModalに対して再レンダリングは行われていることを確認
   const { updateMemo } = useMemoData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    setTitle(memos?.title ?? '');
-    setDescription(memos?.description ?? '');
-  }, [memos]);
+    setTitle(selectedMemo?.title ?? '');
+    setDescription(selectedMemo?.description ?? '');
+  }, [selectedMemo]);
   // selectされたmemoを管理するstateがほしい → そのデータが変わったときに再レンダリングされるようにuseEffectを実行する
   // 依存配列にtitleとdescriptionを追加したら変更が加えられなくなったので違う
   // 更新後に関してはモーダルの画面にはAPIデータが反映されている数秒立つとgetAllmemoの関数内でエラーが起きることがある？
@@ -46,7 +46,6 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
   const onChangeDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
     console.log(e.target.value); // 変更の検知はできている
     setDescription(e.target.value);
-    // console.log(description);
   };
 
   return (
@@ -81,7 +80,7 @@ export const UpdateMemoModal: VFC<Props> = memo((props) => {
           <PrimaryButton
             onClick={async () => {
               // メッセージが表示される前に、モーダルが閉じてしまうところは制御したい
-              await updateMemo(memos?.id, title, description);
+              await updateMemo(selectedMemo?.id, title, description);
               // コンポーネントの再レンダリングが走らず、更新したのに読み込みをかけなければ画面の更新がされていない
               onClose();
             }}>

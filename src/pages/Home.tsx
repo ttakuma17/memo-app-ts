@@ -3,14 +3,9 @@ import { Wrap, WrapItem, useDisclosure } from '@chakra-ui/react';
 
 import { Header } from '../components/Header';
 import { MemoItem } from '../components/MemoItem';
-
 import { useMemoData } from '../hooks/useMemoData';
 import { useSelectMemo } from '../hooks/useSelectMemo';
 import { UpdateMemoModal } from '../components/UpdateMemoModal';
-
-// Todo
-// checboxの値によってデフォルトでcheckedか否か切り替えて表示させる:done
-// checkboxのクリックで切り替えが可能にする:will do
 
 // onClickを押したときにidとmemosのデータを取得して開く処理を担当する関数が必要
 // そのときに登場するのがonSelectMemoの処理となる
@@ -23,7 +18,7 @@ export const Home: VFC = memo(() => {
   // Modal用のChakraUI - hooks
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  useEffect(() => getAllMemos(), [memos]);
+  useEffect(() => getAllMemos(), [getAllMemos, memos]);
   // 依存配列にgetAllMemosのみを追加してもDeleteの再レンダリングはされなかった
   // updateボタンによる処理で再レンダリングがされていないのがなぜか
   // console.log(memos);
@@ -65,7 +60,11 @@ export const Home: VFC = memo(() => {
           </WrapItem>
         ))}
       </Wrap>
-      <UpdateMemoModal isOpen={isOpen} onClose={onClose} memos={selectedMemo} />
+      <UpdateMemoModal
+        isOpen={isOpen}
+        onClose={onClose}
+        selectedMemo={selectedMemo}
+      />
     </>
   );
 });
