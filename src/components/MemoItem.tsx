@@ -21,6 +21,15 @@ type Props = {
   onClick: (id: string) => void;
 };
 
+// textareaのところでWarningが出ていた
+// Warning: Use the `defaultValue` or `value` props instead of setting children on <textarea>. at textarea
+// 直接子要素に指定するときに起きるエラーのよう → defaultValue={description} value={description}
+// ドキュメントにvalueを使うとあるので修正
+// どちらでもWarningは消せたが、読み込みされない状況はよくわからないな、、、
+// textareaがフォーム要素であることが関係しているか？
+// https://ja.reactjs.org/docs/forms.html
+// ドキュメントには独自でstateを持つと記載があるってことはFormで囲ってあげる必要があるか
+
 export const MemoItem: VFC<Props> = memo((props) => {
   const { id, title, description, mark_div, onClick } = props;
   const checkedFlag = mark_div == 1 ? true : false; // stateで管理して変更可能にする
@@ -47,9 +56,8 @@ export const MemoItem: VFC<Props> = memo((props) => {
         resize="none"
         h="180px"
         isReadOnly={true}
-        autoFocus={false}>
-        {description}
-      </Textarea>
+        autoFocus={false}
+        value={description}></Textarea>
       <Flex pt={2} alignItems="center">
         <PrimaryButton onClick={() => onClick(id)}>更新</PrimaryButton>
         <DeleteFunction id={id} />
