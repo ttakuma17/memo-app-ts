@@ -63,36 +63,57 @@ export const useMemoData = () => {
 
   // メモの一覧を取得するために利用する関数
   const getAllMemos = useCallback((): void => {
-    const tokenInLocalStorage: any = localStorage.getItem('token');
-    const token: any = JSON.parse(tokenInLocalStorage);
-
-    // nullだった場合の処理とストレージの値を取得できた場合の処理を切り分けて記載すること
-    // const token = (tokenInLocalStorage: string | null) => {
-    //   if (!tokenInLocalStorage) {
-    //     console.error('トークンを取得してください');
-    //     return;
-    //   }
-    //   return JSON.parse(tokenInLocalStorage);
-    // }
-
-    axiosInstance
-      .get<Array<Memo>>('/memos', {
-        headers: {
-          Authorization: `Bearer ${token.access_token}`,
-        },
-      })
-      .then((response) => {
-        setMemos(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast({
-          title: 'メモデータの取得に失敗しました',
-          status: 'error',
-          isClosable: true,
+    // nullの型制御のテストコード
+    const tokenInLocalStorage: string | null = localStorage.getItem('token');
+    // tokenInLocalStorage の型推論から string | null の可能性があると言われている
+    // 型ガードで対応する
+    if (tokenInLocalStorage === null) {
+      console.error('ローカルストレージへ保存できていません');
+    } else {
+      // 以下の処理へ移行した時点でローカルストレージがNullである可能性は排除できる = 安全なコード
+      const token = JSON.parse(tokenInLocalStorage);
+      console.log(typeof token.access_token);
+      axiosInstance
+        .get<Array<Memo>>('/memos', {
+          headers: {
+            Authorization: `Bearer ${token.access_token}`,
+          },
+        })
+        .then((response) => {
+          setMemos(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+          toast({
+            title: 'メモデータの取得に失敗しました',
+            status: 'error',
+            isClosable: true,
+          });
+          history.push('/');
         });
-        history.push('/');
-      });
+    }
+    // 元のコード
+    // const tokenInLocalStorage: any = localStorage.getItem('token');
+    // const token: any = JSON.parse(tokenInLocalStorage);
+
+    // axiosInstance
+    //   .get<Array<Memo>>('/memos', {
+    //     headers: {
+    //       Authorization: `Bearer ${token.access_token}`,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     setMemos(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     toast({
+    //       title: 'メモデータの取得に失敗しました',
+    //       status: 'error',
+    //       isClosable: true,
+    //     });
+    //     history.push('/');
+    //   });
   }, []);
 
   // メモの新規登録を行う関数
